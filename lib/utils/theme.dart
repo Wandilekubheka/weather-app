@@ -6,7 +6,7 @@ class Ctheme {
     textTheme: TextTheme(
       bodyMedium: TextStyle(
         color: CColors.lightTextColor,
-        fontSize: 12,
+        fontSize: 14,
         fontFamily: "Overpass",
       ),
       titleLarge: TextStyle(
@@ -16,11 +16,12 @@ class Ctheme {
         fontSize: 70,
       ),
       bodyLarge: TextStyle(
-        fontSize: 14,
+        fontSize: 20,
         fontFamily: "Overpass",
         fontWeight: FontWeight.bold,
         color: CColors.lightTextColor,
       ),
     ),
+    iconTheme: IconThemeData(size: 30, color: CColors.lightTextColor),
   );
 }

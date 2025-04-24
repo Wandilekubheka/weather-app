@@ -13,16 +13,13 @@ class CustomScaffold extends StatefulWidget {
 class _CustomScaffoldState extends State<CustomScaffold> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment(0.8, 1),
-          colors: <Color>[CColors.lightBlue, CColors.darkBlue],
-          tileMode: TileMode.mirror,
-        ),
+    return ScaffoldGradientBackground(
+      gradient: LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [CColors.lightBlue, CColors.darkBlue],
       ),
-      child: SafeArea(child: widget.child),
+      body: SafeArea(child: widget.child),
     );
   }
 }
