@@ -14,8 +14,37 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(children: [headerBar()]),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            headerBar(),
+
+            GestureDetector(
+              child: Container(
+                width: 200,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: CColors.lightTextColor,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Forecast report",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: CColors.darkTextColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Icon(Icons.chevron_right, color: CColors.darkTextColor),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
