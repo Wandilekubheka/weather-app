@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/screens/details/details.dart';
 import 'package:weather_app/screens/search/search.dart';
 import 'package:weather_app/utils/colors.dart';
 import 'package:weather_app/utils/widgets/custom_scaffold.dart';
@@ -30,18 +31,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: CColors.lightTextColor,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Forecast report",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: CColors.darkTextColor,
-                        fontWeight: FontWeight.bold,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => DetailsScreen()),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Forecast report",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: CColors.darkTextColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Icon(Icons.chevron_right, color: CColors.darkTextColor),
-                  ],
+                      Icon(Icons.chevron_right, color: CColors.darkTextColor),
+                    ],
+                  ),
                 ),
               ),
             ),
