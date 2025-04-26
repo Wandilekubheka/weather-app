@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/data/models/history_data.dart';
 import 'package:weather_app/screens/home/home.dart';
 import 'package:weather_app/utils/colors.dart';
-import 'package:weather_app/utils/widgets/custom_scaffold.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
