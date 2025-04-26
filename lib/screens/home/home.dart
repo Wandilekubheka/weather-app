@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/screens/search/search.dart';
 import 'package:weather_app/utils/colors.dart';
 import 'package:weather_app/utils/widgets/custom_scaffold.dart';
 
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             headerBar(),
+            mainContent(),
 
             GestureDetector(
               child: Container(
@@ -49,6 +51,51 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget mainContent() {
+    double width = MediaQuery.sizeOf(context).width;
+    return Center(
+      child: Column(
+        children: [
+          Image.asset("assets/images/cloudy.png", width: 350, height: 150),
+          Container(
+            width: width,
+            height: width,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 255, 255, 0.3),
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 10,
+              children: [
+                Text(
+                  "Today, 12 September",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                Text("29", style: Theme.of(context).textTheme.titleLarge),
+                Text("Cloudy", style: Theme.of(context).textTheme.bodyLarge),
+                weatherStatesRow(Icons.wind_power_outlined, "Wind", 'sometext'),
+                weatherStatesRow(Icons.cloud, "Hum", 'sometext'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget weatherStatesRow(
+    IconData leftIcon,
+    String leftText,
+    String rightText,
+  ) {
+    return Row(
+      spacing: 10,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [Icon(leftIcon), Text("$leftText    |    $rightText")],
+    );
+  }
+
   Widget headerBar() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,7 +104,12 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         GestureDetector(
           // navivate to search screen
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => SearchScreen()),
+            );
+          },
           child: Row(
             spacing: 10,
             children: [

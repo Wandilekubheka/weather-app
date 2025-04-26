@@ -8,4 +8,5 @@ class CColors {
   // static  Color backgroundGradientColor = Color.
   static Color lightBlue = HexColor("#47BFDF");
   static Color darkBlue = HexColor("#4A91FF");
+  static Color smokeWhite = HexColor("#FCFCFC");
 }
