@@ -4,7 +4,8 @@ import 'package:weather_app/utils/colors.dart';
 
 class CustomScaffold extends StatefulWidget {
   final Widget child;
-  const CustomScaffold({super.key, required this.child});
+  final Widget? actionButton;
+  const CustomScaffold({super.key, required this.child,  this.actionButton});
 
   @override
   State<CustomScaffold> createState() => _CustomScaffoldState();
@@ -14,12 +15,14 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldGradientBackground(
+      
       gradient: LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
         colors: [CColors.lightBlue, CColors.darkBlue],
       ),
       body: SafeArea(child: widget.child),
+      floatingActionButton: widget.actionButton,
     );
   }
 }

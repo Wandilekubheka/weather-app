@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:weather_app/data/models/history_data.dart';
 import 'package:weather_app/screens/home/home.dart';
 import 'package:weather_app/utils/colors.dart';
@@ -15,27 +17,36 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     // replace gradient background with actual map
     return Scaffold(
-      backgroundColor: CColors.darkBlue,
-      body: Column(
+      appBar: AppBar(
+        backgroundColor: CColors.smokeWhite,
+        leading: Text(""),
+        titleSpacing: 0,
+),
+      body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
-              ),
-
-              // color: CColors.smokeWhite,
-            ),
-            child: searchBar(),
-          ),
+          GoogleMap(initialCameraPosition: 
+          CameraPosition(target: LatLng(-26.120134, 27.901464))),
+                 Column(
+                   children: [
+                     Container(
+                                 decoration: BoxDecoration(
+                                   borderRadius: BorderRadius.only(
+                                     bottomRight: Radius.circular(20),
+                                     bottomLeft: Radius.circular(20),
+                                   ),
+                     
+                                   // color: CColors.smokeWhite,
+                                 ),
+                                 child: searchBar(),
+                               ),
+                   ],
+                 ),
         ],
       ),
     );
   }
 
   Widget searchBar() {
-    double height = MediaQuery.of(context).viewPadding.top;
 
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -50,7 +61,6 @@ class _SearchScreenState extends State<SearchScreen> {
         spacing: 20,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: height),
           SearchBar(
             hintStyle: WidgetStatePropertyAll(
               Theme.of(
