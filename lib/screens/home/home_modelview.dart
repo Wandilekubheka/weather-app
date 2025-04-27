@@ -4,12 +4,24 @@ import 'package:weather_app/domain/repository/location_repo.dart';
 import 'package:weather_app/domain/usecase/use_last_location_name.dart';
 
 class HomeModelview extends ChangeNotifier {
-  String? _locationName;
+  String _locationName = "";
   // WeatherTypes _weatherTypes = WeatherTypes.hot;
   final LocationRepo _locationRepo;
   Position? _position;
   String? _error;
   HomeModelview(this._locationRepo);
+
+  Position get position {
+    if (_position == null) {
+      // random coords incase we fail to get coords
+      return Position(0, 0);
+    }
+    return _position!;
+  }
+
+  String get cityName => _locationName;
+
+  String? get error => _error;
 
   Future<void> updateLastLocationName() async {
     try {
@@ -22,6 +34,7 @@ class HomeModelview extends ChangeNotifier {
     } catch (e) {
       _error = e.toString();
     }
+    notifyListeners();
   }
 
   Future<void> updateTemperature() async {
@@ -30,5 +43,6 @@ class HomeModelview extends ChangeNotifier {
     } catch (e) {
       _error = e.toString();
     }
+    notifyListeners();
   }
 }
