@@ -11,12 +11,8 @@ class Usegetlastlocationname {
     // method for getting location name
     try {
       // verify if user allowed location
-      bool isLocationEnable = await _locationRepo.userAllowedLocation();
-      if (!isLocationEnable) {
-        //request person and reverify if location granted
-        await _locationRepo.getLocationPermission();
-        getLastLocationName();
-      }
+      await _locationRepo.getLocationPermission();
+
       // get position object
       _position = await _locationRepo.getUserLocation();
       List<Placemark> placemarks = await placemarkFromCoordinates(
