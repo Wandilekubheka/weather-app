@@ -1,3 +1,3 @@
 class CConstants {
-  static String weatherAPI = "https://api.openweathermap.org/data/3.0/onecall";
+  static String weatherAPI = "https://api.weatherapi.com/v1/current.json";
 }

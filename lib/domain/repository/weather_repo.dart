@@ -1,4 +1,3 @@
-import 'package:weather_app/data/models/position.dart';
 import 'package:weather_app/data/models/weather_model.dart';
 import 'package:weather_app/data/repository/weather_data.dart';
 import 'package:weather_app/utils/constants.dart';
@@ -6,14 +5,17 @@ import 'package:weather_app/utils/constants.dart';
 class WeatherRepository {
   final WeatherData _weatherData;
   WeatherRepository(this._weatherData);
-  String _apiKey = "";
+  final String _apiKey = "57246ccb51f54769915123238252704";
   // method for fetching weather data from from weather api
-  Future<WeatherResponse> getWeatherData(Position position) async {
-    String url =
-        '${CConstants.weatherAPI}?lat=${position.latitude}&lon=${position.longitude}&appid=$_apiKey';
+  Future<WeatherResponse> getWeatherData(String cityName) async {
+    final String baseUrl = CConstants.weatherAPI;
+
+    final String url = '$baseUrl?key=$_apiKey&q=$cityName';
     try {
-      String response = await _weatherData.requestWeatherdData(url);
-      return WeatherResponse.fromJson(response as Map<String, dynamic>);
+      Map<String, dynamic> response = await _weatherData.requestWeatherdData(
+        url,
+      );
+      return WeatherResponse.fromJson(response);
     } catch (e) {
       rethrow;
     }

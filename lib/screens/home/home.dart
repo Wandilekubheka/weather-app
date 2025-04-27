@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/screens/details/details.dart';
+import 'package:weather_app/screens/home/home_modelview.dart';
 import 'package:weather_app/screens/search/search.dart';
 import 'package:weather_app/utils/colors.dart';
 import 'package:weather_app/utils/widgets/custom_scaffold.dart';
@@ -12,6 +14,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      updateData();
+    });
+  }
+
+  void updateData() async {
+    await Provider.of<HomeModelview>(
+      context,
+      listen: false,
+    ).updateLastLocationName().then((onValue) {
+      Provider.of<HomeModelview>(context, listen: false).updateTemperature();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -81,7 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Today, 12 September",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                Text("29", style: Theme.of(context).textTheme.titleLarge),
+                Text(
+                  context.watch<HomeModelview>().temp.toString(),
+
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 Text("Cloudy", style: Theme.of(context).textTheme.bodyLarge),
                 weatherStatesRow(Icons.wind_power_outlined, "Wind", 'sometext'),
                 weatherStatesRow(Icons.cloud, "Hum", 'sometext'),
@@ -113,17 +136,24 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         GestureDetector(
           // navivate to search screen
-          onTap: () {
-            Navigator.push(
+          onTap: () async {
+            await Provider.of<HomeModelview>(
               context,
-              MaterialPageRoute(builder: (_) => SearchScreen()),
-            );
+              listen: false,
+            ).updateLastLocationName();
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (_) => SearchScreen()),
+            // );
           },
           child: Row(
             spacing: 10,
             children: [
               Icon(Icons.location_on_outlined),
-              Text("Roodepoort", style: Theme.of(context).textTheme.bodyLarge),
+              Text(
+                context.watch<HomeModelview>().cityName,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
             ],
           ),
         ),
