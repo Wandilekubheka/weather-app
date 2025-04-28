@@ -4,7 +4,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_autocomplete_text_field/google_places_autocomplete_text_field.dart';
 import 'package:weather_app/data/models/history_data.dart';
 import 'package:weather_app/data/models/position.dart';
-import 'package:weather_app/screens/home/home.dart';
 import 'package:weather_app/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -16,6 +15,22 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  late final TextEditingController _textController;
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController();
+    _textController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // replace gradient background with actual map
@@ -57,7 +72,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget search2() {
-    TextEditingController _textController = TextEditingController();
     return Container(
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       decoration: BoxDecoration(
@@ -68,6 +82,9 @@ class _SearchScreenState extends State<SearchScreen> {
         spacing: 10,
         children: [
           GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
             child: Icon(Icons.arrow_back, color: CColors.darkTextColor),
           ),
           Expanded(
@@ -108,33 +125,41 @@ class _SearchScreenState extends State<SearchScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           search2(),
-          Text("Recent Search", style: TextStyle(color: CColors.darkTextColor)),
-          // searchHistory(HistoryData(locationName: "roodeport", temp: 32)),
+          if (_textController.text == "")
+            searchHistory(HistoryData(locationName: "roodeport", temp: 32)),
         ],
       ),
     );
   }
 
   Widget searchHistory(HistoryData data) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10,
       children: [
+        Text("Recent Search", style: TextStyle(color: CColors.darkTextColor)),
+
         Row(
-          spacing: 10,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(Icons.watch_later_outlined, color: CColors.darkTextColor),
+            Row(
+              spacing: 10,
+              children: [
+                Icon(Icons.watch_later_outlined, color: CColors.darkTextColor),
+                Text(
+                  data.locationName,
+                  style: TextStyle(
+                    color: CColors.darkTextColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
             Text(
-              data.locationName,
-              style: TextStyle(
-                color: CColors.darkTextColor,
-                fontWeight: FontWeight.bold,
-              ),
+              '${data.temp.toString()}°',
+              style: TextStyle(color: CColors.darkTextColor),
             ),
           ],
-        ),
-        Text(
-          '${data.temp.toString()}°',
-          style: TextStyle(color: CColors.darkTextColor),
         ),
       ],
     );
