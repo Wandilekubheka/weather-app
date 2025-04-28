@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
+import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_places_autocomplete_text_field/google_places_autocomplete_text_field.dart';
 import 'package:weather_app/data/models/history_data.dart';
 import 'package:weather_app/data/models/position.dart';
 import 'package:weather_app/screens/home/home.dart';
@@ -54,6 +56,43 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  Widget search2() {
+    TextEditingController _textController = TextEditingController();
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        border: Border.all(),
+      ),
+      child: Row(
+        spacing: 10,
+        children: [
+          GestureDetector(
+            child: Icon(Icons.arrow_back, color: CColors.darkTextColor),
+          ),
+          Expanded(
+            child: GooglePlacesAutoCompleteTextFormField(
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: CColors.darkTextColor),
+              textEditingController: _textController,
+              googleAPIKey: "AIzaSyDFUnbDx_fl3ha9993Py_wzuVMs9N8UZ1E",
+              decoration: InputDecoration(
+                hintText: 'Search here',
+                hintStyle: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: CColors.lightGreyText),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+
+          GestureDetector(child: Icon(Icons.mic, color: CColors.darkTextColor)),
+        ],
+      ),
+    );
+  }
+
   Widget searchBar() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -68,32 +107,9 @@ class _SearchScreenState extends State<SearchScreen> {
         spacing: 20,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SearchBar(
-            hintStyle: WidgetStatePropertyAll(
-              Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: CColors.lightGreyText),
-            ),
-            backgroundColor: WidgetStatePropertyAll(CColors.lightTextColor),
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
-            hintText: "Search here",
-            leading: GestureDetector(
-              onTap:
-                  () => {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => HomeScreen()),
-                    ),
-                  },
-              child: Icon(Icons.arrow_back, color: CColors.darkTextColor),
-            ),
-            trailing: [Icon(Icons.mic, color: CColors.darkTextColor)],
-          ),
-
+          search2(),
           Text("Recent Search", style: TextStyle(color: CColors.darkTextColor)),
-          searchHistory(HistoryData(locationName: "roodeport", temp: 32)),
+          // searchHistory(HistoryData(locationName: "roodeport", temp: 32)),
         ],
       ),
     );
