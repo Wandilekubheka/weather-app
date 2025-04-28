@@ -48,6 +48,7 @@ class HomeModelview extends ChangeNotifier {
 
   Future<void> updateTemperature() async {
     try {
+      _position = await _locationRepo.getUserLocation();
       UseGetTemperature temperature = UseGetTemperature(
         _locationName,
         weatherRepository: _weatherRepository,

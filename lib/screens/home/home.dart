@@ -137,14 +137,15 @@ class _HomeScreenState extends State<HomeScreen> {
         GestureDetector(
           // navivate to search screen
           onTap: () async {
-            await Provider.of<HomeModelview>(
+            Navigator.push(
               context,
-              listen: false,
-            ).updateLastLocationName();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (_) => SearchScreen()),
-            // );
+              MaterialPageRoute(
+                builder:
+                    (_) => SearchScreen(
+                      position: context.watch<HomeModelview>().position,
+                    ),
+              ),
+            );
           },
           child: Row(
             spacing: 10,

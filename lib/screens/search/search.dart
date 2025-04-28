@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:weather_app/data/models/history_data.dart';
+import 'package:weather_app/data/models/position.dart';
 import 'package:weather_app/screens/home/home.dart';
 import 'package:weather_app/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final Position position;
+  const SearchScreen({super.key, required this.position});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -21,33 +22,39 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: CColors.smokeWhite,
         leading: Text(""),
         titleSpacing: 0,
-),
+      ),
       body: Stack(
         children: [
-          GoogleMap(initialCameraPosition: 
-          CameraPosition(target: LatLng(-26.120134, 27.901464))),
-                 Column(
-                   children: [
-                     Container(
-                                 decoration: BoxDecoration(
-                                   borderRadius: BorderRadius.only(
-                                     bottomRight: Radius.circular(20),
-                                     bottomLeft: Radius.circular(20),
-                                   ),
-                     
-                                   // color: CColors.smokeWhite,
-                                 ),
-                                 child: searchBar(),
-                               ),
-                   ],
-                 ),
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              zoom: 20,
+              target: LatLng(
+                widget.position.latitude,
+                widget.position.longitude,
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                  ),
+
+                  // color: CColors.smokeWhite,
+                ),
+                child: searchBar(),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 
   Widget searchBar() {
-
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
       decoration: BoxDecoration(
