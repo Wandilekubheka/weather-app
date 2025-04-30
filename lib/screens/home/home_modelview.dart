@@ -32,8 +32,10 @@ class HomeModelview extends ChangeNotifier {
 
   Future<void> updateLastLocationName() async {
     try {
-      String? e =
-          await Usegetlastlocationname(_locationRepo).getLastLocationName();
+      Position getPosition = await _locationRepo.getUserLocation();
+      String? e = await Usegetlastlocationname().getCityNameFromCoords(
+        getPosition,
+      );
       if (e == null) {
         _locationName = "Connection Error";
         _error = "Connection Error";

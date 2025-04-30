@@ -4,7 +4,7 @@ import 'package:weather_app/utils/constants.dart';
 
 class WeatherRepository {
   final WeatherData _weatherData;
-  WeatherRepository(this._weatherData);
+  const WeatherRepository(this._weatherData);
   final String _apiKey = "57246ccb51f54769915123238252704";
   // method for fetching weather data from from weather api
   Future<WeatherResponse> getWeatherData(String cityName) async {

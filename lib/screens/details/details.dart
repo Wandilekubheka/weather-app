@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/data/models/hourly_weather.dart';
+import 'package:weather_app/data/models/position.dart';
 import 'package:weather_app/utils/widgets/custom_scaffold.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
+  final String locationCity;
+
+  const DetailsScreen({super.key, required this.locationCity});
 
   @override
   Widget build(BuildContext context) {
