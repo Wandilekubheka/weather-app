@@ -6,6 +6,7 @@ import 'package:weather_app/domain/repository/location_repo.dart';
 import 'package:weather_app/domain/repository/weather_repo.dart';
 import 'package:weather_app/screens/home/home.dart';
 import 'package:weather_app/screens/home/home_modelview.dart';
+import 'package:weather_app/screens/search/search_modelview.dart';
 import 'package:weather_app/utils/theme.dart';
 
 void main() {
@@ -18,6 +19,7 @@ void main() {
         ChangeNotifierProvider(
           create: (_) => HomeModelview(locationRepo, weatherRepository),
         ),
+        ChangeNotifierProvider(create: (_) => SearchModelview()),
       ],
       child: const MyApp(),
     ),

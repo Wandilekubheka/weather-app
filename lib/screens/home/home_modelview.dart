@@ -3,20 +3,20 @@ import 'package:weather_app/data/models/position.dart';
 import 'package:weather_app/data/models/weather_model.dart';
 import 'package:weather_app/domain/repository/location_repo.dart';
 import 'package:weather_app/domain/repository/weather_repo.dart';
-import 'package:weather_app/domain/usecase/use_get_temperature.dart';
 import 'package:weather_app/domain/usecase/use_last_location_name.dart';
 
 class HomeModelview extends ChangeNotifier {
-  String _locationName = "life mos";
+  String _locationName = "";
   // WeatherTypes _weatherTypes = WeatherTypes.hot;
   final LocationRepo _locationRepo;
-  final WeatherRepository _weatherRepository;
+  WeatherRepository _weatherRepository;
   Position? _position;
-  double _temp = 0;
+  WeatherResponse? _response;
+
   String? _error;
   HomeModelview(this._locationRepo, this._weatherRepository);
 
-  double get temp => _temp;
+  WeatherResponse? get weatherInfo => _response;
 
   Position get position {
     if (_position == null) {
@@ -30,7 +30,13 @@ class HomeModelview extends ChangeNotifier {
 
   String? get error => _error;
 
-  Future<void> updateLastLocationName() async {
+  Future<void> updateLastLocationName(String cityName) async {
+    // incase city name is provided by a route
+    if (cityName.isNotEmpty) {
+      _locationName = cityName;
+      return;
+    }
+    // attempt to get city name
     try {
       Position getPosition = await _locationRepo.getUserLocation();
       String? e = await Usegetlastlocationname().getCityNameFromCoords(
@@ -48,14 +54,9 @@ class HomeModelview extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateTemperature() async {
+  Future<void> updateWeatherInfo() async {
     try {
-      _position = await _locationRepo.getUserLocation();
-      UseGetTemperature temperature = UseGetTemperature(
-        _locationName,
-        weatherRepository: _weatherRepository,
-      );
-      _temp = await temperature.getTemperature();
+      _response = await _weatherRepository.getWeatherData(_locationName);
     } catch (e) {
       _error = e.toString();
     }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_autocomplete_text_field/google_places_autocomplete_text_field.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/data/models/history_data.dart';
 import 'package:weather_app/data/models/position.dart';
-import 'package:weather_app/screens/details/details.dart';
+import 'package:weather_app/screens/home/home.dart';
+import 'package:weather_app/screens/search/search_modelview.dart';
 import 'package:weather_app/utils/colors.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -101,28 +103,35 @@ class _SearchScreenState extends State<SearchScreen> {
                 ).textTheme.bodyMedium?.copyWith(color: CColors.lightGreyText),
                 border: InputBorder.none,
               ),
-              // onSuggestionClicked: (prediction) {
-              //   // incase for some reason we cant get coords.
-              //   if (prediction.lat == null || prediction.lng == null) {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       SnackBar(content: Text("An Unknown error occured")),
-              //     );
-              //     Navigator.pop(context);
-              //     return;
-              //   }
-              //   Navigator.pushReplacement(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder:
-              //           (_) => DetailsScreen(
-              //             position: Position.fromString(
-              //               lat: prediction.lat!,
-              //               long: prediction.lng!,
-              //             ),
-              //           ),
-              //     ),
-              //   );
-              // },
+              onSuggestionClicked: (prediction) {
+                // incase for some reason we cant get coords.
+                if (prediction.description == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("An Unknown error occured")),
+                  );
+                  Navigator.pop(context);
+                  return;
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(prediction.description!)),
+                );
+                SearchModelview modelview = Provider.of<SearchModelview>(
+                  context,
+                  listen: false,
+                );
+                modelview.extractCityName(prediction.description!);
+                if (modelview.error != null) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(modelview.error!)));
+                }
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => HomeScreen(cityName: modelview.cityName),
+                  ),
+                );
+              },
             ),
           ),
 

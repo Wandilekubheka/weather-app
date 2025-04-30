@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/screens/details/details.dart';
 import 'package:weather_app/screens/home/home_modelview.dart';
 import 'package:weather_app/screens/search/search.dart';
-import 'package:weather_app/utils/colors.dart';
 import 'package:weather_app/utils/widgets/custom_scaffold.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String cityName;
+  const HomeScreen({super.key, this.cityName = ""});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -17,17 +16,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      updateData();
-    });
-  }
-
-  void updateData() async {
-    await Provider.of<HomeModelview>(
-      context,
-      listen: false,
-    ).updateLastLocationName().then((onValue) {
-      Provider.of<HomeModelview>(context, listen: false).updateTemperature();
+    context.read<HomeModelview>().updateLastLocationName(widget.cityName).then((
+      onValue,
+    ) {
+      context.read<HomeModelview>().updateWeatherInfo();
     });
   }
 
@@ -38,58 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            headerBar(),
-            mainContent(),
-
-            GestureDetector(
-              child: Container(
-                width: 200,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: CColors.lightTextColor,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (_) => DetailsScreen(
-                              locationCity:
-                                  context.watch<HomeModelview>().cityName,
-                            ),
-                      ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Forecast report",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: CColors.darkTextColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Icon(Icons.chevron_right, color: CColors.darkTextColor),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+          children: [headerBar(), mainContent()],
         ),
       ),
     );
   }
 
   Widget mainContent() {
+    final weatherInfo = context.watch<HomeModelview>().weatherInfo;
     double width = MediaQuery.sizeOf(context).width;
+    if (weatherInfo == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Center(
       child: Column(
         children: [
+          // going to reuse icon since we dont have more weather Icons.
           Image.asset("assets/images/cloudy.png", width: 350, height: 150),
           Container(
             width: width,
@@ -103,17 +60,25 @@ class _HomeScreenState extends State<HomeScreen> {
               spacing: 10,
               children: [
                 Text(
-                  "Today, 12 September",
+                  weatherInfo.location.tzId,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Text(
-                  context.watch<HomeModelview>().temp.toString(),
+                  weatherInfo.current.tempC.toString(),
 
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text("Cloudy", style: Theme.of(context).textTheme.bodyLarge),
-                weatherStatesRow(Icons.wind_power_outlined, "Wind", 'sometext'),
-                weatherStatesRow(Icons.cloud, "Hum", 'sometext'),
+                weatherStatesRow(
+                  Icons.wind_power_outlined,
+                  "Wind",
+                  weatherInfo.current.windKph.toString(),
+                ),
+                weatherStatesRow(
+                  Icons.cloud,
+                  "Hum",
+                  weatherInfo.current.humidity.toString(),
+                ),
               ],
             ),
           ),
